@@ -1,7 +1,7 @@
 " Set of functions to open a Java import statement as a file.
 " Maintained by Darren Greaves <darren@krapplets.org>
-" http://krapplets.org/linux/vim/
-" Version 0.1
+" http://boncey.org/vim.shtml
+" Version 0.2
 " Suggested stuff to add to your ~.vimrc:
 " let $JAVASOURCEPATH="$SERVLET_HOME/src/share,$JAVA_HOME/src,$XML_HOME/src"
 " map H :call OpenJavaImport($JAVASOURCEPATH)<CR>
@@ -11,7 +11,6 @@
 " The paths in $JAVASOURCEPATH should have the source packages directly
 " underneath each path.  The script needs to be able to add the package to the
 " path element and open a file.
-
 
 " Open the file for a package path.
 " Converts the package path into a file path then appends ".java" to the file
@@ -23,7 +22,7 @@
 " If a package ends in "*" then opens a file browser in this directory instead.
 function! OpenJavaImport(javapath)
     let line = getline(".")
-    let regex = '^import \(\S\+\);$'
+    let regex = '^import\s\+\(\S\+\);$'
     let l = matchstr(line, regex)
     let file = substitute(l, regex, '\1', '')
 
@@ -39,7 +38,7 @@ function! OpenJavaImport(javapath)
         let javapath = RemoveFirstPathElement(javapath, regex)
         let lfile = path . "/" . file . ".java"
 
-        if ((match(lfile, "\*\.java$") != -1) && has("GUI"))
+        if ((match(lfile, "\*\.java$") != -1) && has("gui_running"))
             let lfile = substitute(lfile, "\*\.java$", "", "")
             if (isdirectory(expand(lfile)))
                 let $FILE = lfile
